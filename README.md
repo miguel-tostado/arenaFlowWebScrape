@@ -1,4 +1,4 @@
-# FloSports / Arena Web Scraper
+# FLOWRESTLING / Arena Web Scraper
 Web scraper for Arena Flow
 
 1) Install Python <https://www.python.org/downloads/>
