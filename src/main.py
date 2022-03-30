@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
-from openpyxl import Workbook
+import openpyxl
 import time
 import os
 
@@ -18,9 +18,7 @@ def startDriver():
     option.add_argument("--log-level=3")
 
     url = "https://arena.flowrestling.org/"
-    driver = webdriver.Chrome(
-        "C:\\Users\mtost\Downloads\chromedriver_win32\chromedriver", options=option
-    )
+    driver = webdriver.Chrome("#", options=option)  #!!! GET LOCAL PATH
     driver.get(url)
 
     element = WebDriverWait(driver, 10).until(
@@ -212,9 +210,10 @@ def writeToExcel(eventData):
     Args:
         eventData (dict): Event dictionary that uses each round as a key, and each athlete has it's own array inside the event array.
     """
-    workbook = Workbook()
-    # sheet = workbook[""]
-    sheet = workbook.active
+    path = "#"  #!!!GET LOCAL PATH
+    workbook = openpyxl.load_workbook(path)
+    sheet = workbook["Python"]
+    # sheet = workbook.active
 
     count = 1
     data = eventData
@@ -224,16 +223,16 @@ def writeToExcel(eventData):
         count += 1
         for athlete in data[event]:
             if athlete[0] != "" and athlete[1] != "":
-                sheet["A" + str(count)] = athlete[0]
-                sheet["B" + str(count)] = athlete[1]
+                sheet["A" + str(count)] = athlete[0] + athlete[1]
                 count += 1
 
-    file = "roundData.xlsx"
-    workbook.save(filename="src/" + file)
+    # file = "roundData.xlsx"
+    # workbook.save(filename="src/" + file)
+    workbook.save(path)
 
-    scriptDirectory = os.path.dirname(__file__)
-    absPath = os.path.join(scriptDirectory, file)
-    os.startfile(absPath)
+    # scriptDirectory = os.path.dirname(__file__)
+    # absPath = os.path.join(scriptDirectory, file)
+    os.startfile(path)
 
 
 driver = startDriver()
