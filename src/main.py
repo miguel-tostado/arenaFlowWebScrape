@@ -7,24 +7,26 @@ import time
 import os
 
 
-###################################################################################
-####    Initiates the web driver for Chrome
+def startDriver():
+    """Starts the Chrome web driver
 
-option = webdriver.ChromeOptions()
-option.add_argument("--headless")
-option.add_argument("--log-level=3")
+    Returns:
+        string: Returns the website's HTML file.
+    """
+    option = webdriver.ChromeOptions()
+    option.add_argument("--headless")
+    option.add_argument("--log-level=3")
 
-url = "https://arena.flowrestling.org/"
-driver = webdriver.Chrome(
-    "C:\\Users\mtost\Downloads\chromedriver_win32\chromedriver", options=option
-)
-driver.get(url)
+    url = "https://arena.flowrestling.org/"
+    driver = webdriver.Chrome(
+        "C:\\Users\mtost\Downloads\chromedriver_win32\chromedriver", options=option
+    )
+    driver.get(url)
 
-element = WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located((By.CLASS_NAME, "loader-region"))
-)
-
-###################################################################################
+    element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, "loader-region"))
+    )
+    return driver
 
 
 def getResultsEvents(page):
@@ -228,15 +230,14 @@ def writeToExcel(eventData):
 
     file = "roundData.xlsx"
     workbook.save(filename=file)
-    os.startfile(file)
+
+    scriptDirectory = os.path.dirname(__file__)
+    absPath = os.path.join(scriptDirectory, file)
+    os.startfile(absPath)
 
 
-page = driver.page_source
-
-resultBlock = getResultsEvents(page)
+driver = startDriver()
+resultBlock = getResultsEvents(driver.page_source)
 resultURL = getURL(resultBlock)
 eventData = getEventData(resultURL)
 writeToExcel(eventData)
-
-
-driver.quit()
