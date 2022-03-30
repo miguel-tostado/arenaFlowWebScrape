@@ -229,7 +229,7 @@ def writeToExcel(eventData):
                 count += 1
 
     file = "roundData.xlsx"
-    workbook.save(filename=file)
+    workbook.save(filename="src/" + file)
 
     scriptDirectory = os.path.dirname(__file__)
     absPath = os.path.join(scriptDirectory, file)
